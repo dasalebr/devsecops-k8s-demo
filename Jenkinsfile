@@ -66,4 +66,4 @@ pipeline {
              dependencyCheckPublisher pattern: 'target/dependenct-check-report.xml'
         }
      }
-  }
+  
