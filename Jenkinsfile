@@ -21,7 +21,7 @@ pipeline {
       }
       stage('Vulnerability Scan - Docker') {
         steps {
-          parallel{
+          parallel(
             "Dependency Scan": {
           sh "mvn dependency-check:check"
             },
@@ -39,7 +39,7 @@ pipeline {
             sh './wizcli docker scan --image $dockerImageName'
             }
 
-          }
+          )
         }
       }    
       stage('Docker Build and Push') {
