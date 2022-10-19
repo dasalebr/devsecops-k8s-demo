@@ -38,7 +38,6 @@ pipeline {
             sh 'echo "Scanning the image using wizcli..."'
             sh './wizcli docker scan --image $dockerImageName'
             }
-
           )
         }
       }    
@@ -59,14 +58,15 @@ pipeline {
             }
           }
       }
-     post { 
-        always { 
-             junit 'target/surefire-reports/*.xml'
-             jacoco execPattern: 'target/jacoco.exec'
-             dependencyCheckPublisher pattern: 'target/dependenct-check-report.xml'
-        }
-     
+    post {
+    always {
+      junit 'target/surefire-reports/*.xml'
+      jacoco execPattern: 'target/jacoco.exec'
+      pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+      dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+    }
+
   }
 
-
-} 
+  }
+}
