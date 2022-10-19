@@ -21,8 +21,25 @@ pipeline {
       }
       stage('Vulnerability Scan - Docker') {
         steps {
+          parallel{
+            "Dependency Scan": {
           sh "mvn dependency-check:check"
-        
+            },
+            "Wizcli Scan": {
+              // Download_WizCLI
+            sh 'echo "Downloading wizcli..."'
+            sh 'curl -o wizcli https://wizcli.app.wiz.io/wizcli'
+            sh 'chmod +x wizcli'
+            // Auth with Wiz
+            sh 'echo "Authenticating to the Wiz API..."'
+            withCredentials([usernamePassword(credentialsId: 'wizcli', usernameVariable: 'ID', passwordVariable: 'SECRET')]) {
+            sh './wizcli auth --id $ID --secret $SECRET'}
+            // Scanning the image
+            sh 'echo "Scanning the image using wizcli..."'
+            sh './wizcli docker scan --image $dockerImageName'
+            }
+
+          }
         }
       }    
       stage('Docker Build and Push') {
