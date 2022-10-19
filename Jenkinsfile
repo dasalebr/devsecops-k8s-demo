@@ -23,7 +23,7 @@ pipeline {
         steps {
           parallel(
             "Dependency Scan": {
-          sh "mvn dependency-check:check"
+            sh "mvn dependency-check:check"
             },
             "Wizcli Scan": {
               // Download_WizCLI
@@ -50,7 +50,7 @@ pipeline {
           sh 'docker push dasalebr81/numeric-app:""$GIT_COMMIT"" '
         }
       }        
-    }
+    
       stage('Kubernetes Deployment - DEV') {
             steps {
               withKubeConfig([credentialsId: 'kubeconfig']) {
@@ -66,4 +66,4 @@ pipeline {
              dependencyCheckPublisher pattern: 'target/dependenct-check-report.xml'
         }
      }
-  
+  }
