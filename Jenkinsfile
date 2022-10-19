@@ -67,10 +67,4 @@ pipeline {
         }
   }
 
- // success {
-
-  //}
-  //failure {
-
-  //}
-//}
+ 
