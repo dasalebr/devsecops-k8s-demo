@@ -65,6 +65,6 @@ pipeline {
              jacoco execPattern: 'target/jacoco.exec'
              dependencyCheckPublisher pattern: 'target/dependenct-check-report.xml'
         }
-  }
+      }
 
  
