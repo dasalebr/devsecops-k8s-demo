@@ -50,14 +50,14 @@ pipeline {
           sh 'docker push dasalebr81/numeric-app:""$GIT_COMMIT"" '
         }
       }        
-    
+   } 
       stage('Kubernetes Deployment - DEV') {
             steps {
               withKubeConfig([credentialsId: 'kubeconfig']) {
                 sh "sed -i 's#replace#dasalebr81/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
                 sh "kubectl apply -f k8s_deployment_service.yaml"
-              }
             }
+          }
       }
      post { 
         always { 
@@ -65,5 +65,8 @@ pipeline {
              jacoco execPattern: 'target/jacoco.exec'
              dependencyCheckPublisher pattern: 'target/dependenct-check-report.xml'
         }
-     }
+     
   }
+
+
+} 
