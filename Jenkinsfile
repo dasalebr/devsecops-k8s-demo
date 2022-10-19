@@ -11,12 +11,7 @@ pipeline {
       stage('Unit Tests') {
             steps {
               sh "mvn test"
-            }
-            post {
-              always{
-                junit 'target/surefire-reports/*.xml'
-                jacoco execPattern: 'target/jacoco.exec'
-              }
+            
             }
       }
        stage('SonarQube - SAST') {
@@ -27,11 +22,7 @@ pipeline {
       stage('Vulnerability Scan - Docker') {
         steps {
           sh "mvn dependency-check:check"
-        }
-        post {
-          always {
-            dependencyCheckPublisher pattern: 'target/dependenct-check-report.xml'
-          }
+        
         }
       }    
       stage('Docker Build and Push') {
@@ -51,5 +42,18 @@ pipeline {
               }
             }
       }
+     post { 
+        always { 
+             junit 'target/surefire-reports/*.xml'
+             jacoco execPattern: 'target/jacoco.exec'
+             dependencyCheckPublisher pattern: 'target/dependenct-check-report.xml'
+        }
   }
-}
+
+ // success {
+
+  //}
+  //failure {
+
+  //}
+//}
