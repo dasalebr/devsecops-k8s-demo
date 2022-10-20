@@ -36,6 +36,8 @@ pipeline {
             sh './wizcli auth --id $ID --secret $SECRET'}
             // Scanning the image
             sh 'echo "Scanning the image using wizcli..."'
+            dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
+            echo $dockerImageName
             sh './wizcli docker scan --image $dockerImageName'
             }
           )
@@ -51,7 +53,7 @@ pipeline {
       }        
    } 
       stage('Kubernetes Deployment - DEV') {
-            steps {
+              steps {
               withKubeConfig([credentialsId: 'kubeconfig']) {
                 sh "sed -i 's#replace#dasalebr81/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
                 sh "kubectl apply -f k8s_deployment_service.yaml"
